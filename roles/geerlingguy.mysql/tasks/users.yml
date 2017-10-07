@@ -1,0 +1,18 @@
+---
+- name: Ensure MySQL users are present.
+  mysql_user:
+    name: "{{ item.name }}"
+    host: "{{ item.host | default('localhost') }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.priv | default('*.*:USAGE') }}"
+    state: "{{ item.state | default('present') }}"
+    append_privs: "{{ item.append_privs | default('no') }}"
+    encrypted: "{{ item.encrypted | default('no') }}"
+  with_items: "{{ mysql_users }}"
+  no_log: true
+  ignore_errors: true
+ # DA ERRORES CUANDO HACES VAGRANT PROVISION Y YA ESTABAN CREADOS LOS USUARIOS DE MySQL
+ # PORQUE (item=(censored due to no_log))=>{"censored": "the output has been hidden ...
+ # ATENCIÓN : ESTE CAMBIO (AÑADIR ignore_errors: true) SE HACE DIRECTAMENTE EN EL ROLE.
+ # CUIDADO EN REINSTALACIONES DE ROLE REQUIREMENTS, SE PIERDE EL CAMBIO.
+

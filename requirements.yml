@@ -1,2 +1,25 @@
 ---
+- src: geerlingguy.mysql
 
+#- src: geerlingguy.git
+#- src: geerlingguy.nodejs
+#- src: geerlingguy.ruby
+#
+#- src: geerlingguy.ntp
+#- src: geerlingguy.security
+#- src: geerlingguy.firewall
+#- src: geerlingguy.backup
+#- src: geerlingguy.postfix
+#
+#- src: geerlingguy.apache
+#- src: geerlingguy.munin
+#- src: geerlingguy.munin-node
+#- src: networklore.nagios
+#- src: networklore.nrpe-client
+#- src: Mooash.nagios-nrpe-server
+#- src: geerlingguy.java
+#- src: geerlingguy.elasticsearch
+#- src: geerlingguy.elasticsearch-curator
+#- src: geerlingguy.kibana
+#- src: geerlingguy.logstash
+#- src: geerlingguy.filebeat
