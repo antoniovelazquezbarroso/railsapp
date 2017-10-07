@@ -5,9 +5,9 @@
 #                          # YOU'LL NEED TO RUN $ ansible-galaxy install -requirements.yml,
 #                          # AND YOU'LL NEED TO AMEND playbooks/nginx/main.yml ACCORDINGLY.
 #
-#- src: geerlingguy.git
-#- src: geerlingguy.nodejs
-#- src: geerlingguy.ruby
+- src: geerlingguy.git
+- src: geerlingguy.nodejs
+- src: geerlingguy.ruby
 #
 #- src: geerlingguy.ntp
 #- src: geerlingguy.security
@@ -27,4 +27,3 @@
 #- src: geerlingguy.kibana
 #- src: geerlingguy.logstash
 #- src: geerlingguy.filebeat
-

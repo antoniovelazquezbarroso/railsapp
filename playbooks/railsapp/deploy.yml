@@ -1,0 +1,77 @@
+---
+- hosts: app
+  become: yes
+
+  vars_files:
+    - vars.yml
+  
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+#      delegate_to: "{{ groups['web'][0] }}"
+#      NOT NECESSARY AT THIS STAGE ( 1 app server connected through local socket)
+#      WILL BE NEEDED WHEN RUNNING MULTIPLE APP SERVERS OR SEPARATE WEB SERVER
+
+  tasks:
+    - name: Ensure demo application is at correct release.
+      git:
+        repo: "{{ git_repository }}" # Git repository where the app lives.
+        version: "{{ git_version }}" # To choose version repository to checkout
+                                     # (can be a branch name, tag name or SHA-1 hash)
+                                     # defaults to the literal string HEAD. 
+        dest: "{{ app_directory }}"
+        accept_hostkey: true
+        force: yes
+      register: app_updated
+      notify: restart nginx
+
+    # THESE INCLUDED TASKS SET RAILS SECRETS, JSON LOGS AND database.yml CONFIG
+    - include: set_rails.yml
+    # THESE INCLUDED TASKS SET THE NGINX-UPSTREAM AND THE PUMA GEM AND CONFIG FILE
+    - include: set_puma.yml
+    # THESE INCLUDED TASKS SET GOD GEM, CONFIG AND UPSTART FILES
+    - include: set_god.yml
+      when: monitoring_with_god
+
+    - name: Install required dependencies with bundler.
+      shell: "bundle install --path vendor/bundle chdir={{ app_directory }}"
+      when: app_updated.changed == true
+      notify: restart nginx
+
+    - name: Perform deployment-related database rake tasks (ONLY ONCE PER APP SERVER GROUP).
+      shell: "{{ item }} chdir={{ app_directory }}"
+      with_items:
+        - bundle exec rake db:migrate
+        - bundle exec rake db:seed
+      environment: "{{app_environment}}"
+      when: app_updated.changed == true and inventory_hostname == groups.app[0]
+      notify: restart nginx
+
+    - name: Perform deployment-related assets rake tasks (ON EACH APP SERVER// PENDING CORREGIR).
+      shell: "{{ item }} chdir={{ app_directory }}"
+      with_items:
+        - bundle exec rake assets:precompile
+      environment: "{{app_environment}}"
+      when: app_updated.changed == true
+      notify: restart nginx
+
+    - name: Ensure demo application has correct user for files.
+      file:
+        path: "{{ app_directory }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        recurse: yes
+      notify: restart nginx
+
+    - name: Start Puma server.
+      become: yes
+      shell: "bundle exec puma -C {{ app_directory }}/config/puma.rb chdir={{ app_directory }}"
+      notify: restart nginx
+      when: monitoring_with_god == false
+
+    - name: Start Puma Server by starting its monitoring by God (which in turn keeps alive Puma).
+      become: yes
+      shell: "bundle exec god -c {{ app_directory }}/config/god.rb --log {{ app_directory }}/log/god_main.log chdir={{ app_directory }}"
+      when: monitoring_with_god
+
