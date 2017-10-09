@@ -14,8 +14,8 @@ daemonize true
 pidfile "{{ app_directory }}/tmp/pids/puma.pid"
 state_path "{{ app_directory }}/tmp/pids/puma.state"
 
-bind "unix://{{ app_directory }}/tmp/sockets/puma.sock"
-#bind 'tcp://0.0.0.0:9292'
+#bind "unix://{{ app_directory }}/tmp/sockets/puma.sock"
+bind 'tcp://0.0.0.0:9292'
 
 # Logging
 stdout_redirect "log/puma.stdout.log", "log/puma.stderr.log", true

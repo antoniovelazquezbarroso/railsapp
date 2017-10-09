@@ -17,11 +17,11 @@ APP_DIR=/opt/{{ app_name }}      # FOR DEPLOYMENT WITH playbooks/railsapp/deploy
 # APP_DIR=/opt/{{ app_name }}/current  # FOR DEPLOYMENT WITH CAPISTRANO
 PUMA_CONFIG_FILE=$APP_DIR/config/puma.rb
 PUMA_PID_FILE=$APP_DIR/tmp/pids/puma.pid
-PUMA_SOCKET=$APP_DIR/tmp/sockets/puma.sock        # IF USING SOCKET
+#PUMA_SOCKET=$APP_DIR/tmp/sockets/puma.sock        # IF USING SOCKET
 
 # check if puma process is running
 puma_is_running() {
-  if [ -S $PUMA_SOCKET ] ; then           # IF USING SOCKET
+#  if [ -S $PUMA_SOCKET ] ; then           # IF USING SOCKET
     if [ -e $PUMA_PID_FILE ] ; then
       if cat $PUMA_PID_FILE | xargs pgrep -P > /dev/null ; then
         return 0
@@ -31,9 +31,9 @@ puma_is_running() {
     else
       echo "No puma pid file found"
     fi
-  else                                    # IF USING SOCKET
-    echo "No puma socket found"           # IF USING SOCKET
-  fi                                      # IF USING SOCKET
+#  else                                    # IF USING SOCKET
+#    echo "No puma socket found"           # IF USING SOCKET
+#  fi                                      # IF USING SOCKET
 
   return 1
 }
@@ -41,7 +41,7 @@ puma_is_running() {
 case "$1" in
   start)
     echo "Starting puma..."
-    rm -f $PUMA_SOCKET                    # IF USING SOCKET
+#    rm -f $PUMA_SOCKET                    # IF USING SOCKET
 
     if [ -e $PUMA_CONFIG_FILE ] ; then
       echo "cd $APP_DIR && RAILS_ENV=$RAILS_ENV bundle exec puma -C $PUMA_CONFIG_FILE"
@@ -58,7 +58,7 @@ case "$1" in
     echo "Stopping puma..."
       kill -s SIGTERM `cat $PUMA_PID_FILE`
       rm -f $PUMA_PID_FILE
-      rm -f $PUMA_SOCKET                   # IF USING SOCKET
+#      rm -f $PUMA_SOCKET                   # IF USING SOCKET
 
     echo "done"
     ;;

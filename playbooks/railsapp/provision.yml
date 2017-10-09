@@ -73,28 +73,15 @@
         collation: utf8_general_ci
         encoding: utf8
         state: present
+      when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
+      delegate_to: "{{ groups['db'][0] }}"
 
-# SETTING THE MYSQL USERS IS NOT NECESSARY AT THIS STAGE
-# IF YOU LEAVE THE DEFAULTS (root user with password, mysql socket at /var/run/mysqld/mysqld.sock).
-# WE WILL NEED THIS TASK WHEN WE CALL MYSQL FROM REMOTE APPLICATION SERVERS,
-# BECAUSE MYSQL USERS DEMAND SPECIFIC username@hostname CONFIGURATION)
-#    - name: Ensure MySQL users are present.
-#      mysql_user:
-#        name: "{{ item.name }}"
-#        host: "{{ item.host | default('localhost') }}"
-#        password: "{{ item.password }}"
-#        priv: "{{ item.priv | default('*.*:USAGE') }}"
-#        state: "{{ item.state | default('present') }}"
-#        append_privs: "{{ item.append_privs | default('no') }}"
-#        encrypted: "{{ item.encrypted | default('no') }}"
-#      with_items:
-#        - name: "{{ app_name}}"
-#          host: "{{ groups['app'][0] }}"
-#          password: "{{ app_name }}"
-#          priv: "{{ app_name }}_production.*:ALL"
-#        # TO ADD ANOTHER USER FOR ANOTHER RAILS APPLICATION SERVER
-#        #- name: "{{ app_name}}"
-#        #  host: "{{ groups['app'][1] }}"
-#        #  password: "{{ app_name}}"
-#        #  priv: "{{ app_name }}_production.*:ALL"
-#      no_log: true
+    - name: Ensure MySQL users are present.
+      mysql_user:
+        name: "{{ app_name}}"
+        host: "{{ inventory_hostname }}" # FOR EACH MEMBER OF THE RAILSAPP GROUP
+        password: "{{ app_name}}"
+        priv: "{{ app_name }}_production.*:ALL"
+        state: present
+      no_log: true
+      delegate_to: "{{ groups['db'][0] }}"

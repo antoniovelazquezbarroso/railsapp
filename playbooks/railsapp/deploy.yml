@@ -8,9 +8,7 @@
   handlers:
     - name: restart nginx
       service: name=nginx state=restarted
-#      delegate_to: "{{ groups['web'][0] }}"
-#      NOT NECESSARY AT THIS STAGE ( 1 app server connected through local socket)
-#      WILL BE NEEDED WHEN RUNNING MULTIPLE APP SERVERS OR SEPARATE WEB SERVER
+      delegate_to: "{{ groups['web'][0] }}"
 
   tasks:
     - name: Ensure demo application is at correct release.

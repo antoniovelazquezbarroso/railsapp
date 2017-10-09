@@ -8,6 +8,8 @@
     owner: "{{ app_user }}"
     group: "{{ app_user }}"
     mode: 0664
+  when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
+  delegate_to: "{{ groups['web'][0] }}"
   notify: restart nginx
 
 - name: Ensure Unicorn gem absent of Gemfile

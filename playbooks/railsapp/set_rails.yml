@@ -40,40 +40,32 @@
     insertbefore: "end"
   notify: restart nginx 
 
-
-## SETTING THE /config/database.yml SETTINGS IS NOT NECESSARY AT THIS STAGE
-## IF YOU LEAVE THE DEFAULTS (root user with password, mysql socket at /var/run/mysqld/mysqld.sock).
-## THIS SETTING WILL BE NEEDED WHEN CALLING MYSQL FROM REMOTE APPLICATION SERVERS
-## (BECAUSE TO CONNECT TO THE DATABASE THROUGH TCP THE RIGHT USER IS REQUIRED
-## AND MYSQL USERS DEMAND SPECIFIC username@hostname CONFIGURATION).
-## /playbooks/rais/provision.yml CREATES THEM WITH THE TASK "Ensure MySQL users are present."
-
-#  - name: Set Rails Database Config for TCP connection
-#    lineinfile:
-#      path: "{{ app_directory }}/config/database.yml"
-#      regexp: "{{ item.regexp }}"
-#      line: "{{ item.line }}"
-#      state: present
-#      insertafter : '  password:'
-#    with_items:
-#      - {
-#        regexp: "  socket:",
-#        line: "#  socket: /var/run/mysqld/mysqld.sock     # Ubuntu 14.04"
-#      }
-#      - {
-#        regexp: " port: 3306",
-#        line: "  port: 3306"
-#      }
-#      - {
-#        regexp: "  host:"
-#        line: "  host: {{ groups['db'][0] }}"
-#      }
-#      - {
-#        regexp: "  password: root",
-#        line: "  password: {{ app_name }}"
-#      }
-#      - {
-#        regexp: "  username: root",
-#        line: "  username: {{ app_name }}"
-#      }
-#    notify: restart nginx
+- name: Set Rails Database Config for TCP connection
+  lineinfile:
+    path: "{{ app_directory }}/config/database.yml"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    insertafter : '  password:'
+  with_items:
+    - {
+      regexp: "  socket:",
+      line: "#  socket: /var/run/mysqld/mysqld.sock     # Ubuntu 14.04"
+    }
+    - {
+      regexp: " port: 3306",
+      line: "  port: 3306"
+    }
+    - {
+      regexp: "  host:",
+      line: "  host: {{ groups['db'][0] }}"
+    }
+    - {
+      regexp: "  password: root",
+      line: "  password: {{ app_name }}"
+    }
+    - {
+      regexp: "  username: root",
+      line: "  username: {{ app_name }}"
+    }
+  notify: restart nginx
