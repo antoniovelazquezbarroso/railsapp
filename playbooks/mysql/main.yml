@@ -2,6 +2,55 @@
 - hosts: db
   become: yes
 
+#===================================================================================================
+#    DATABASE REPLICATION 
+#    (YOU WILL ALSO NEED TO ADD A HOST TO THE INVENTORY, IN GROUP db, AS SLAVE)
+#    SEE THE vars.yml FILE FOR MORE DETAILS ABOUT DATABASE REPLICATION
+#
+  vars_files:
+    - vars.yml
+    
+  pre_tasks:                                # YOU NEED TO CREATE THEM AFTER HAVING RUN provision.yml
+    - name: Create dynamic MySQL variables. # TO PROVIDE YOU WITH HOSTS IPs, NAMES, GROUPS, ETC.
+      set_fact:                             # ONCE THE INVENTORY HAS BEEN SETUP (AWS, Digital Ocean)
+        mysql_replication_master: "{{ groups['db'][0] }}"  #   SEE vars.yml
+      #  mysql_users:                                       #   YOU ONLY NEED THIS FOR REPLICATION
+      #    - name: mycompany_user
+      #      host: "{{ groups['db'][0] }}"
+      #      password: secret
+      #      priv: "*.*:SELECT"
+      # THE PRE_TASK TO CREATE MYSQL USERS IS NOT NEEDED HERE
+      # BECAUSE /playbooks/rais/provision.yml WILL CREATE THEM
+      # WITH THE TASK "Ensure MySQL users are present."
+      #
+      # THE PRE_TASK TO CREATE MYSQL USERS IS NOT NEEDED 
+      # if you use in your app config/database.yml the mysql root user 
+      # calling through the mysql local socket /var/run/mysqld/mysqld.sock ,
+      # from a local rails application (from the same host), this works
+      # because the mysql role creates by default a full privileged root@localhost mysql user.
+      # 
+      # THIS PRE_TASK TO CREATE MYSQL USERS BECOMES NEEDED
+      # WHEN WE CALL MYSQL FROM REMOTE APPLICATION SERVERS
+      # (BECAUSE YOU NEED SPECIFIC username@hostname USERS IN MYSQL)
+      # IN OUR CASE /playbooks/rais/provision.yml TAKES CARE OF CREATING THEM
+      # FOR EACH app server THAT NEEDS ACCESS TO THE DATABASE
+      # WITH THE TASK "Ensure MySQL users are present."
+      # A SAMPLE TASK TO CREATE THEM FROM HERE WOULD BE THE FOLLOWING:
+      #  pre_tasks:
+      #    - name: Create dynamic MySQL variables for MySQL users.
+      #      set_fact:
+      #        mysql_users:
+      #          - name: "{{ app_name}}"
+      #            host: "{{ groups['app'][0] }}"
+      #            password: "{{ app_name }}"
+      #            priv: "{{ app_name }}_production.*:ALL"
+      #        # TO ADD ANOTHER USER FOR ANOTHER RAILS APPLICATION SERVER
+      #        #  - name: "{{ app_name}}"
+      #        #    host: "{{ groups['app'][1] }}"
+      #        #    password: "{{ app_name}}"
+      #        #    priv: "{{ app_name }}_production.*:ALL"
+#========================================================================================= 
+
   roles:
     - geerlingguy.mysql
       # ATENCIÓN. ESTE ROLE LLEVA UN CAMBIO PARA EVITAR UN ERROR OCASIONAL AL EJECUTAR EL PLAYBOOK.

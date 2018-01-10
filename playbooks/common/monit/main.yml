@@ -35,6 +35,19 @@
       notify:
         - reload monit
 
+    # Create folder for monit service_check related scripts
+    - name: Ensure /etc/monit/scripts directory exists and is writeable.
+      file:
+        path: /etc/monit/scripts
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    # THESE INCLUDED TASKS SET A MONIT CHECK OVER DATABASE REPLICATION
+    - include: check_mysql_replication.yml
+      when: (mysql_replication_role is defined) and mysql_replication_role == 'slave'
+
     - name: Monit | Determine queued messages
       command: "ls -1 {{monit_eventqueue_directory}}/"
       register: monit_queued_messages
@@ -47,3 +60,6 @@
         state: absent
       when: not monit_email_enable or not monit_eventqueue_enable
       with_items: monit_queued_messages.stdout_lines
+
+
+

@@ -1,0 +1,53 @@
+---
+# REPLICATION =====================================================
+# YOU NEED UNCOMMENT THIS (SET THE mysql_replication_user)
+# IF YOU WANT TO USE REPLICATION
+mysql_replication_user: {name: 'replication', password: 'secret'}
+
+# You will also need to define the following variables
+# if you want to use replication
+#
+#    'mysql_replication_role'(master or slave)
+#    'mysql_server_id'(1 o 2)
+#
+#     both get defined in the inventory file initially, and later
+#     will be placed at .yml files named after each host,
+#     in the hosts_vars folder placed alongside the inventory file.
+#
+#    'mysql_replication_master'     ( SEE playbooks/mysql/main.yml )
+#
+#     defined in the main.yml playbook,
+#     as a pre-task, by dinamically setting a fact 
+#     (the inventory data : hostnames, groups, IPs, etc)
+#     once the playbook has started, and after having run
+#     the provision.yml playbook ( that provides dynamic inventory data
+#     for provisioning hosts from AWS or Digital Ocean ).
+#
+#     For a simpler case you could also define it just here uncommenting
+#
+#     # mysql_replication_master: "{{ groups['db'][0] }}"
+#
+#     and remove the pre-task from main.yml .
+#
+# =================================================================
+
+# DATABASES TO CREATE (AND SETUP FOR REPLICATION) =================
+mysql_databases:
+  - name: railsapp_production
+    collation: utf8_general_ci
+    encoding: utf8
+# You need to define databases here (before running the role)
+# If you want them included for replication
+# See the mysql role README
+# =================================================================
+
+# LOGGING =========================================================
+# MySql general log
+mysql_log: /var/log/mysql/mysql-general.log
+# MySql error log
+mysql_log_error: /var/log/mysql/mysql-error.log
+# MySql slow query log settings.
+mysql_slow_query_log_file: /var/log/mysql/mysql-slow.log
+mysql_slow_query_log_enabled: yes
+mysql_slow_query_time: "2"
+# =================================================================
