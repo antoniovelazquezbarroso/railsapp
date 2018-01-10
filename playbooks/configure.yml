@@ -2,3 +2,4 @@
 - include: mysql/main.yml
 - include: nginx/main.yml
 - include: railsapp/main.yml
+- include: common/main.yml
