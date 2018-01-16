@@ -14,8 +14,8 @@ Vagrant.configure("2") do |config|
 
   # Define required VMs with name and static private IP addresses.
   boxes = [
-#    { :name => "vm47", :ip => "192.168.2.47" }, # FOR FUTURE REPLICATION AND MONITORING
-    { :name => "vm57", :ip => "192.168.2.57" },
+    { :name => "vm47", :ip => "192.168.2.47" },  # FOR MONITORING AND DB REPLICATION 
+    { :name => "vm57", :ip => "192.168.2.57" },  # app1 RAILS, web AND db SERVER (MASTER)
     { :name => "vm67", :ip => "192.168.2.67" },  # app2 RAILS SERVER
 #    { :name => "vm70", :ip => "192.168.2.70" }, # FOR FUTURE NEEDS (¿¿ ??)
   ]

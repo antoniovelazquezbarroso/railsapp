@@ -1,6 +1,8 @@
 ---
 # Services to be monitored by monit checks ( placed at etc/monit/conf.d/)
 monit_checked_services:
+  - elasticsearch
+  - logstash
   - mysql
   - nginx
   - puma
