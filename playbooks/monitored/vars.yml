@@ -46,7 +46,7 @@ filebeat_prospectors:
 # Comment-out the former definitions and place the right ones
 # in a .yml group_vars or host_vars file, named after the relevant inventory group/host
 # =======================================================================
-#Variables for munin-node configuration
+# Variables for munin-node configuration
 munin_node_allowed_ips:
   - '^192\.168\.2\.47$'
   - '^::1$'
@@ -69,6 +69,13 @@ munin_node_config: {
 }
 
 # For fine-grained group-based plugin configuration of munin-node 
+# Comment-out the former definitions and place the right ones
+# in a .yml group_vars or host_vars file, named after the relevant inventory group/host
+# ========================================================================
+# Variables for nagios-nrpe-server configuration
+nagios_nrpe_server_allowed_hosts: "{{ groups['monitoring'][0] }}"
+
+# For fine-grained group-based plugin configuration of nagios-nrpe-server
 # Comment-out the former definitions and place the right ones
 # in a .yml group_vars or host_vars file, named after the relevant inventory group/host
 # ========================================================================

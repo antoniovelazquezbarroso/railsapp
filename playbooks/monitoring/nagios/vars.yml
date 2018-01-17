@@ -1,0 +1,5 @@
+---
+#Variables for nagios master
+nagios_users:
+  - user: nagiosadmin
+    pass: nagiosadmin

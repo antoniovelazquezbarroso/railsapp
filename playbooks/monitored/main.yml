@@ -13,4 +13,4 @@
   roles:
     - geerlingguy.filebeat
     - geerlingguy.munin-node
-#    - Mooash.nagios-nrpe-server
+    - Mooash.nagios-nrpe-server
