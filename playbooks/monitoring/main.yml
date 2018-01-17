@@ -1,2 +1,3 @@
 ---
 - include: elk/main.yml
+- include: munin/main.yml

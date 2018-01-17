@@ -46,3 +46,29 @@ filebeat_prospectors:
 # Comment-out the former definitions and place the right ones
 # in a .yml group_vars or host_vars file, named after the relevant inventory group/host
 # =======================================================================
+#Variables for munin-node configuration
+munin_node_allowed_ips:
+  - '^192\.168\.2\.47$'
+  - '^::1$'
+
+# List of munin plugins to enable in any monitored host.
+munin_node_plugins: []
+  # - name: uptime
+  # - name: if_eth0
+  #   plugin: if_
+  # - name: ps_test
+  #   plugin: ps_
+
+# Plugin configuration options (the key is the plugin heading, items in the
+# array will be options for the plugin).
+munin_node_config: {
+  # "ps_test": {
+  #   "env.regex": "bash",
+  #   "env.name": "bash"
+  # }
+}
+
+# For fine-grained group-based plugin configuration of munin-node 
+# Comment-out the former definitions and place the right ones
+# in a .yml group_vars or host_vars file, named after the relevant inventory group/host
+# ========================================================================
