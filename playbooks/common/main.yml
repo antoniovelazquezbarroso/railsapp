@@ -1,2 +1,8 @@
 ---
 - include: monit/main.yml
+- include: backup/main.yml
+- include: logrotate/main.yml
+- include: ntp/main.yml
+- include: security/main.yml
+- include: firewall/main.yml
+- include: postfix/main.yml

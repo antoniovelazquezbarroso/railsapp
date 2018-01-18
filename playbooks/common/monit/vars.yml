@@ -1,11 +1,19 @@
 ---
 # Services to be monitored by monit checks ( placed at etc/monit/conf.d/)
 monit_checked_services:
+  - apache
+  - backup
+  - cron
   - elasticsearch
   - logstash
   - mysql
   - nginx
+  - ntp
+  - postfix
   - puma
+  - rsyslog
+  - ssh
+  - system
 
 #-------------------------------------------------------------------
 # VARS FROM file: monit/defaults/main.yml  IN THE ORIGINAL ANXS.monit role

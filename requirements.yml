@@ -9,11 +9,11 @@
 - src: geerlingguy.nodejs
 - src: geerlingguy.ruby
 #
-#- src: geerlingguy.ntp
-#- src: geerlingguy.security
-#- src: geerlingguy.firewall
-#- src: geerlingguy.backup
-#- src: geerlingguy.postfix
+- src: geerlingguy.ntp
+- src: geerlingguy.security
+- src: geerlingguy.firewall
+- src: geerlingguy.backup
+- src: geerlingguy.postfix
 #
 - src: geerlingguy.apache
 - src: geerlingguy.munin

@@ -37,12 +37,12 @@
       with_items:
       - files/01-beats-input.conf
       - files/02-local-syslog-input.conf
-#      - files/03-local-apache-input.conf
+      - files/03-local-apache-input.conf
       - files/04-local-mysql-input.conf
       - files/05-local-monit-input.conf
       - files/06-local-logstash-input.conf
       - files/10-syslog-filter.conf
-#      - files/12-apache-filter.conf
+      - files/12-apache-filter.conf
 #      - files/13-mysql-filter.conf  # DOES NOT WORK PROPERLY
       - files/14-nginx-filter.conf
       - files/30-elasticsearch-output.conf
