@@ -6,8 +6,8 @@
 192.168.2.57
 
 [db]
-192.168.2.57 mysql_replication_role=master mysql_server_id=1
-192.168.2.47 mysql_replication_role=slave mysql_server_id=2
+192.168.2.57 # mysql_replication_role=master mysql_server_id=1
+192.168.2.47 # mysql_replication_role=slave mysql_server_id=2
 
 [monitoring]
 192.168.2.47
