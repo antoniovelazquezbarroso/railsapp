@@ -15,13 +15,13 @@
 - src: geerlingguy.backup
 - src: geerlingguy.postfix
 #
-- src: geerlingguy.apache
-- src: geerlingguy.munin
-- src: geerlingguy.munin-node
+#- src: geerlingguy.apache
+#- src: geerlingguy.munin
+#- src: geerlingguy.munin-node
 
-- src: networklore.nagios
-- src: networklore.nrpe-client
-- src: Mooash.nagios-nrpe-server
+#- src: networklore.nagios
+#- src: networklore.nrpe-client
+#- src: Mooash.nagios-nrpe-server
 
 - src: geerlingguy.java
 - src: geerlingguy.elasticsearch
