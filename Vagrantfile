@@ -3,7 +3,8 @@
 
 Vagrant.configure("2") do |config|
   # Base VM OS configuration.
-  config.vm.box = "geerlingguy/ubuntu1404"
+  #config.vm.box = "geerlingguy/ubuntu1404"
+  config.vm.box = "geerlingguy/ubuntu1604"
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.ssh.insert_key = false
 
