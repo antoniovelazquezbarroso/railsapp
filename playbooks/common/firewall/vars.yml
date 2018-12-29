@@ -20,9 +20,9 @@ firewall_allowed_tcp_ports:
   - "9292" # puma
 
 firewall_additional_rules:
-  # Allow mysql-replication traffic from mysql-master (192.168.2.57)
+  # Allow mysql-replication traffic from mysql-master (192.168.2.30)
   # We don´t know what will be the port being called
-  - "iptables -A INPUT -p tcp -s 192.168.2.57 -j ACCEPT"
+  - "iptables -A INPUT -p tcp -s 192.168.2.30 -j ACCEPT"
   # Ignore Dropbox LAN Sync broadcasts(17500) and similars (137, 138)
   - "iptables -A INPUT -p udp -m udp --dport 17500 -j DROP"
   - "iptables -A INPUT -p udp -m udp --dport 137 -j DROP"

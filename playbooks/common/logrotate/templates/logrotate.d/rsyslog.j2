@@ -10,8 +10,8 @@
     notifempty
     delaycompress
     compress
-    create 0644 root root
+    create 0644 syslog adm
     postrotate
-        reload rsyslog >/dev/null 2>&1 || true
+        invoke-rc.d rsyslog rotate > /dev/null
     endscript
 }
