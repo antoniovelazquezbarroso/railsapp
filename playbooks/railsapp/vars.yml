@@ -1,6 +1,6 @@
 ---
 # Variables for our app.
-git_repository: https://github.com/antoniovelazquezbarroso/myticketee_mysql.git
+git_repository: https://github.com/antoniovelazquezbarroso/myticketee_3db.git
 git_version: mysql        # Allows choosing the version of the repo
                           # Here it is the relevant branch name
 app_name : railsapp
