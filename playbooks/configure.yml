@@ -1,9 +1,9 @@
 ---
-- include: mysql/main.yml
-- include: nginx/main.yml
-- include: railsapp/main.yml
-- include: common/main.yml
-#- include: monitoring/main.yml
-#- include: monitored/main.yml
-- include: elk/main.yml
-- include: filebeat/main.yml
+- include: postgres/main.yml
+#   - include: nginx/main.yml
+#   - include: railsapp/main.yml
+#   - include: common/main.yml
+#   #- include: monitoring/main.yml
+#   #- include: monitored/main.yml
+#   - include: elk/main.yml
+#   - include: filebeat/main.yml

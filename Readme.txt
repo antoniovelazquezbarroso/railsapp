@@ -34,15 +34,6 @@
 # =========================================================================================================
 # IF YOU REINSTALL THE ROLES (from ansible-galaxy), CHECK FOR REQUIRED AMMENDMENTS at:
 
-#   role mysql/tasks/users.yml, añadir ignore_errors= true en linea 13
-
-#   role mysql/templates/my.cnf.j2, sustituir referencia al log en linea 27 (bajo {% if mysql_log %} )
-#          sustituir "log_file = {{ mysql_log }}" por
-#                 "general_log = 1"  /n nueva linea
-#            "general_log_file = {{ mysql_log }}"                           (sobre {% endif %} )
-#        ( cambió mysql en la versión para Ubuntu 16.04, no arranca mysql sin este cambio en my.cnf)
-
-#   role nrpe-client/tasks/main.yml añadir validate_certs=no al final de linea 17 (task Get NRPE)
 
 #   role backup/templates/backup.sh.j2, incluir monit check
 #        (añadir NOW=$(date +"%T"), y
