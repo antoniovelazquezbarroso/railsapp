@@ -37,15 +37,15 @@
       dest: /etc/nginx/nginx.conf
     notify: restart nginx
 
-# TO PLACE playbooks/files/welcome_page.html AS A SPECIAL DEFAULT WELCOME PAGE 
-  - name: Copy nginx specific welcome page to be shown in default site
-    copy: src=files/welcome_page.html dest=/var/www/html/index.nginx-debian.html
+## TO PLACE playbooks/files/welcome_page.html AS A SPECIAL DEFAULT WELCOME PAGE 
+#  - name: Copy nginx specific welcome page to be shown in default site
+#    copy: src=files/welcome_page.html dest=/var/www/html/index.nginx-debian.html
 
-#  - name: Remove nginx default site
-#    file: >
-#      dest=/etc/nginx/sites-available/default
-#      state=absent
-#    notify: restart nginx
+  - name: Remove nginx default site
+    file: >
+      dest=/etc/nginx/sites-available/default
+      state=absent
+    notify: restart nginx
 
 #  - name: Copy nginx vhost config file for myapp
 #    copy: src=files/myapp.conf dest=/etc/nginx/sites-available/myapp.conf

@@ -27,9 +27,9 @@
     - include: set_rails.yml
     # THESE INCLUDED TASKS SET THE NGINX-UPSTREAM AND THE PUMA GEM AND CONFIG FILE
     - include: set_puma.yml
-    # THESE INCLUDED TASKS SET GOD GEM, CONFIG AND UPSTART FILES
-    - include: set_god.yml
-      when: monitoring_with_god
+#    # THESE INCLUDED TASKS SET GOD GEM, CONFIG AND UPSTART FILES
+#    - include: set_god.yml
+#      when: monitoring_with_god
 
     - name: Install required dependencies with bundler.
       shell: "bundle install --path vendor/bundle chdir={{ app_directory }}"
@@ -66,10 +66,10 @@
       become: yes
       shell: "bundle exec puma -C {{ app_directory }}/config/puma.rb chdir={{ app_directory }}"
       notify: restart nginx
-      when: monitoring_with_god == false
-
-    - name: Start Puma Server by starting its monitoring by God (which in turn keeps alive Puma).
-      become: yes
-      shell: "bundle exec god -c {{ app_directory }}/config/god.rb --log {{ app_directory }}/log/god_main.log chdir={{ app_directory }}"
-      when: monitoring_with_god
+#      when: monitoring_with_god == false
+#
+#    - name: Start Puma Server by starting its monitoring by God (which in turn keeps alive Puma).
+#      become: yes
+#      shell: "bundle exec god -c {{ app_directory }}/config/god.rb --log {{ app_directory }}/log/god_main.log chdir={{ app_directory }}"
+#      when: monitoring_with_god
 
