@@ -1,23 +1,6 @@
 ---
 - hosts: web
   become: yes
-# ================================================
-#  INSTALLING NGINX THROUGH ROLE (WITHOUT ANY CONFIGURATION)
-#  VARS ARE ONLY NEEDED IF INSTALLING NGINX THROUGH ROLE
-#  vars_files:
-#    - vars.yml
-#
-#  roles:
-#    - geerlingguy.nginx
-#
-#  NOTHING ELSE NEEDED IF USING THE ROLE
-# ================================================
-
-# ================================================
-#  ALTERNATIVE INSTALLATION (MAKES UNNECCESARY THE NGINX ROLE)
-#  INSTALLING NGINX DIRECTLY WITHOUT USING THE ROLE
-#  ADDS CONFIGURATION FOR NGINX JSON FORMAT ACCESS LOGS
-#  YOU CAN ADD ADDITIONAL CONFIG (I.E. VHOSTS, UPSTREAMS, etc.)
 
   handlers:
   - name: restart nginx
@@ -37,15 +20,15 @@
       dest: /etc/nginx/nginx.conf
     notify: restart nginx
 
-## TO PLACE playbooks/files/welcome_page.html AS A SPECIAL DEFAULT WELCOME PAGE 
-  - name: Copy nginx specific welcome page to be shown in default site
-    copy: src=files/welcome_page.html dest=/var/www/html/index.nginx-debian.html
+### TO PLACE playbooks/files/welcome_page.html AS A SPECIAL DEFAULT WELCOME PAGE 
+#  - name: Copy nginx specific welcome page to be shown in default site
+#    copy: src=files/welcome_page.html dest=/var/www/html/index.nginx-debian.html
 
-#  - name: Remove nginx default site
-#    file: >
-#      dest=/etc/nginx/sites-available/default
-#      state=absent
-#    notify: restart nginx
+  - name: Remove nginx default site
+    file: >
+      dest=/etc/nginx/sites-available/default
+      state=absent
+    notify: restart nginx
 
 #  - name: Copy nginx vhost config file for myapp
 #    copy: src=files/myapp.conf dest=/etc/nginx/sites-available/myapp.conf
