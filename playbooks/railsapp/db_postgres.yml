@@ -1,0 +1,52 @@
+---
+# THESE TASKS ARE IMPORTED IN THE deploy.yml PLAYBOOK
+# THEY SET POTSGRESQL LIBRARIES AND CONFIGURATION
+- name: Install app dependencies for postgresql.
+  apt:
+    name : ['libpq-dev','python-psycopg2']
+    state: present
+
+- name: Create postgres user for the app
+  postgresql_user:
+    name: "{{ app_user }}"
+    password: "{{ app_user }}"
+    #role_attr_flags: CREATEDB,NOSUPERUSER
+    state: present
+  become: yes
+  become_user: postgres
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  # Avoid problems becoming postgres user
+  vars:
+    ansible_ssh_pipelining: true
+  when: inventory_hostname == groups.app[0] # ONLY ONCE PER APP GROUP
+  delegate_to: "{{ groups['db'][0] }}"
+
+- name: Setup app production database if not already exists
+  postgresql_db:
+    name: "{{ app_name }}_production"
+    owner: "{{ app_user }}"
+    state: present
+  become: yes
+  become_user: postgres
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  # Avoid problems becoming postgres user
+  vars:
+    ansible_ssh_pipelining: true
+  when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
+  delegate_to: "{{ groups['db'][0] }}"
+
+# FOR EACH OF THE app SERVERS
+- name: Setup postgres hba entry (for postgres user and app production database)
+  lineinfile:
+    path: "/etc/postgresql/9.5/main/pg_hba.conf"
+    regexp: "^#?host {{ app_name }}_production {{ app_user }} {{ inventory_hostname }}/32 password"
+    line: "host {{ app_name }}_production {{ app_user }} {{ inventory_hostname }}/32 password"
+    state: present
+  become: yes
+  become_user: postgres
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  # Avoid problems becoming postgres user
+  vars:
+    ansible_ssh_pipelining: true
+  delegate_to: "{{ groups['db'][0] }}"
+  notify: restart postgresql

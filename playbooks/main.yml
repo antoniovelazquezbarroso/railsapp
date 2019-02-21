@@ -1,5 +1,5 @@
 ---
-- include: postgres/main.yml
-- include: nginx/main.yml
-- include: railsapp/main.yml
+- import_playbook: postgres/main.yml
+- import_playbook: nginx/main.yml
+- import_playbook: railsapp/main.yml
 

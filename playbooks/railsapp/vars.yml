@@ -16,4 +16,5 @@ app_environment:
 # Variables for Ruby installation.
 my_ruby_version: 2.3.8
 
-
+# Variables for database configuration
+db_type: postgres
