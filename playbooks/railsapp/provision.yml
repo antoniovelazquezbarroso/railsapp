@@ -5,6 +5,13 @@
   vars_files:
     - vars.yml
 
+  handlers:
+  - name: restart postgresql
+    service:
+      name: postgresql
+      state: restarted
+    delegate_to: "{{ groups['db'][0] }}"
+
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.nodejs
@@ -23,6 +30,11 @@
 #      with_items:
 #        - libsqlite3-dev
 #        - libreadline-dev
+
+    - name: Install app dependencies for postgresql.
+      apt: "name={{ item }} state=present"
+      with_items:
+        - libpq-dev
 
 #    - name: Install app dependencies for mysql.
 #      apt: "name={{ item }} state=present"
@@ -103,6 +115,23 @@
       when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
       delegate_to: "{{ groups['db'][0] }}"
 
+  # FOR EACH OF THE app SERVERS
+    - name: Setup postgres hba entry (for postgres user and app production database)
+      lineinfile:
+        path: "/etc/postgresql/9.5/main/pg_hba.conf"
+        regexp: "^#?host {{ app_name }}_production {{ app_user }} {{ inventory_hostname }}/32 password"
+        line: "host {{ app_name }}_production {{ app_user }} {{ inventory_hostname }}/32 password"
+        state: present
+      become: yes
+      become_user: postgres
+      # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+      # Avoid problems becoming postgres user
+      vars:
+        ansible_ssh_pipelining: true
+      delegate_to: "{{ groups['db'][0] }}"
+      notify: restart postgresql
+
+
       #  CREO QUE NO ES NECESARIO, AL SER acme OWNER
 #  - name: Ensure we have access from the new user
 #    become: yes
@@ -118,3 +147,25 @@
 #      ansible_ssh_pipelining: true
 #      when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
 #      delegate_to: "{{ groups['db'][0] }}"
+
+#=================================
+# For MySQL
+
+#    - name: Setup app production database if not already exists
+#      mysql_db:
+#        name: "{{ app_name }}_production"
+#        collation: utf8_general_ci
+#        encoding: utf8
+#        state: present
+#      when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
+#      delegate_to: "{{ groups['db'][0] }}"
+#
+#    - name: Ensure MySQL users are present.
+#      mysql_user:
+#        name: "{{ app_name}}"
+#        host: "{{ inventory_hostname }}" # FOR EACH MEMBER OF THE RAILSAPP GROUP
+#        password: "{{ app_name}}"
+#        priv: "{{ app_name }}_production.*:ALL"
+#        state: present
+#      no_log: true
+#      delegate_to: "{{ groups['db'][0] }}"#
