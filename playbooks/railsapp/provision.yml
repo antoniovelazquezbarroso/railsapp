@@ -25,22 +25,10 @@
       }
 
   tasks:
-#    - name: Install app dependencies for sqlite.
-#      apt: "name={{ item }} state=present"
-#      with_items:
-#        - libsqlite3-dev
-#        - libreadline-dev
-
     - name: Install app dependencies for postgresql.
       apt: "name={{ item }} state=present"
       with_items:
         - libpq-dev
-
-#    - name: Install app dependencies for mysql.
-#      apt: "name={{ item }} state=present"
-#      with_items:
-#        - mysql-client
-#        - libmysqlclient-dev
 
     - name: Add or update deploy user
       user:
@@ -54,29 +42,6 @@
         state: present
         key: "{{ lookup('file', '/Users/antonio/.ssh/id_rsa.pub') }}" #  Mac
   #      key: "{{ lookup('file', '/home/antonio/.ssh/id_rsa.pub') }}" #  Ubuntu
-
-#    #    Deploy user needs to create links for nginx upstream configuration (Capistrano)
-#        - name: Ensure deploy user permissions over folders /etc/nginx/sites
-#          file:
-#            path: "{{ item }}"
-#            state: directory
-#            group: "{{ app_user }}"
-#            mode: 0775
-#          with_items:
-#            - /etc/nginx/sites-available
-#            - /etc/nginx/sites-enabled
-#          when: deploying_with_capistrano == true
-#    
-#    #   To allow the deploy user to restart Nginx (EXCESIVO, CORREGIR) (Capistrano) 
-#    #   Bastaría con darle derechos sobre "/etc/init.d/nginx restart"
-#    #   Pero puede crear conflicto con palybook set_god.yml (ver el final)
-#        - name: Add full sudo group rights for deploy user
-#          lineinfile:
-#            dest: /etc/sudoers
-#            regexp: "{{ app_user }}"
-#            line: "{{ app_user }} ALL=(ALL) NOPASSWD: ALL"
-#            state: present
-#          when: deploying_with_capistrano == true
 
     - name: Ensure app directory exists and is writeable.
       file:
@@ -130,42 +95,3 @@
         ansible_ssh_pipelining: true
       delegate_to: "{{ groups['db'][0] }}"
       notify: restart postgresql
-
-
-      #  CREO QUE NO ES NECESARIO, AL SER acme OWNER
-#  - name: Ensure we have access from the new user
-#    become: yes
-#    become_user: postgres
-#    postgresql_privs:
-#      db: acme
-#      role: acme
-#      objs: ALL_IN_SCHEMA
-#      privs: SELECT,INSERT,UPDATE,DELETE
-#    # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
-#    # Avoid problems becoming postgres user
-#    vars:
-#      ansible_ssh_pipelining: true
-#      when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
-#      delegate_to: "{{ groups['db'][0] }}"
-
-#=================================
-# For MySQL
-
-#    - name: Setup app production database if not already exists
-#      mysql_db:
-#        name: "{{ app_name }}_production"
-#        collation: utf8_general_ci
-#        encoding: utf8
-#        state: present
-#      when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
-#      delegate_to: "{{ groups['db'][0] }}"
-#
-#    - name: Ensure MySQL users are present.
-#      mysql_user:
-#        name: "{{ app_name}}"
-#        host: "{{ inventory_hostname }}" # FOR EACH MEMBER OF THE RAILSAPP GROUP
-#        password: "{{ app_name}}"
-#        priv: "{{ app_name }}_production.*:ALL"
-#        state: present
-#      no_log: true
-#      delegate_to: "{{ groups['db'][0] }}"#

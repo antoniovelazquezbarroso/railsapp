@@ -2,26 +2,25 @@
 - hosts: db
   become: true  # you need sudo
 
-  vars_files:
-  - vars.yml
-
   handlers:
   - name: restart postgresql
     service:
-      name: "{{ postgresql_daemon }}"
-      state: "{{ postgresql_restarted_state }}"
+      name: postgresql
+      state: restarted
 
-  pre_tasks:
+  tasks:
   - name: package update (apt)
     apt: update_cache=yes cache_valid_time=3600
 
-  roles:
-  - role: geerlingguy.postgresql
-
-  tasks:
+  - name: Install app dependencies for postgresql 
+    apt:
+      name: ['postgresql','postgresql-client','libpq-dev','python-psycopg2']
+      state: present
+    
   - name: Set Postgresql config listening to all addresses 
     lineinfile:
       path: "/etc/postgresql/9.5/main/postgresql.conf"
-      regexp: "#listen_addresses = 'localhost'"
+      regexp: "^#?listen_addresses = 'localhost'"
+      backrefs: yes
       line: "listen_addresses = '*'"
     notify: restart postgresql

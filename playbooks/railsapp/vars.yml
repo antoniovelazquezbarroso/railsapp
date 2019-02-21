@@ -14,8 +14,6 @@ app_environment:
   RAILS_ENV: production
 
 # Variables for Ruby installation.
-ruby_install_from_source: true
-ruby_download_url: http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.0.tar.gz
 my_ruby_version: 2.3.8
 
 

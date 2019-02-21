@@ -31,9 +31,10 @@ Vagrant.configure("2") do |config|
       if opts[:name] == "vm49"
 #      if opts[:name] == "vm70"         # The last vhost 
         config.vm.provision "ansible" do |ansible|
-          ansible.playbook = "playbooks/configure.yml"
+          ansible.playbook = "playbooks/main.yml"
           ansible.inventory_path = "inventories/vagrant/inventory"
           ansible.limit = "all"
+          ansible.compatibility_mode = "2.0"
           ansible.extra_vars = {
             ansible_ssh_user: 'vagrant',
             ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key"

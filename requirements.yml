@@ -1,19 +1,6 @@
 ---
-- src: geerlingguy.postgresql
-- src: geerlingguy.git
-- src: geerlingguy.nodejs
-- src: rvm.ruby
-#     #
-#     - src: geerlingguy.ntp
-#     - src: geerlingguy.security
-#     - src: geerlingguy.firewall
-#     - src: geerlingguy.backup
-#     - src: geerlingguy.postfix
+#- src: geerlingguy.postgresql
+#- src: geerlingguy.git
+#- src: geerlingguy.nodejs
+#- src: rvm.ruby
 
-     
-#     - src: geerlingguy.java
-#     - src: geerlingguy.elasticsearch
-#     - src: geerlingguy.elasticsearch-curator
-#     - src: geerlingguy.kibana
-#     - src: geerlingguy.logstash
-#     - src: geerlingguy.filebeat
