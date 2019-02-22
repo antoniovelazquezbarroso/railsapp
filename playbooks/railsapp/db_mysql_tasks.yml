@@ -1,0 +1,26 @@
+---
+# THESE TASKS ARE IMPORTED IN THE deploy.yml PLAYBOOK
+# THEY SET MYSQL REQUIRED LIBRARIES AND CONFIGURATION
+- name: Install app dependencies for mysql.
+  apt:
+    name: ['mysql-client','libmysqlclient-dev']
+    state: present
+
+- name: Setup app production database if not already exists
+  mysql_db:
+    name: "{{ app_name }}_production"
+    collation: utf8_general_ci
+    encoding: utf8
+    state: present
+  when: inventory_hostname == groups.app[0] # ONLY ONCE PER GROUP
+  delegate_to: "{{ groups['db'][0] }}"
+
+- name: Ensure MySQL users are present.
+  mysql_user:
+    name: "{{ app_name}}"
+    host: "{{ inventory_hostname }}" # FOR EACH MEMBER OF THE RAILSAPP GROUP
+    password: "{{ app_name}}"
+    priv: "{{ app_name }}_production.*:ALL"
+    state: present
+  no_log: true
+  delegate_to: "{{ groups['db'][0] }}"

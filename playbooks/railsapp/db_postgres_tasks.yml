@@ -1,6 +1,6 @@
 ---
 # THESE TASKS ARE IMPORTED IN THE deploy.yml PLAYBOOK
-# THEY SET POTSGRESQL LIBRARIES AND CONFIGURATION
+# THEY SET POTSGRESQL REQUIRED LIBRARIES AND CONFIGURATION
 - name: Install app dependencies for postgresql.
   apt:
     name : ['libpq-dev','python-psycopg2']
