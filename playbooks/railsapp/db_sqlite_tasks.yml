@@ -1,0 +1,7 @@
+---
+# THESE TASKS ARE IMPORTED IN THE deploy.yml PLAYBOOK
+# THEY SET SQLITE REQUIRED LIBRARIES
+- name: Install app dependencies for sqlite.
+  apt:
+    name: ['libsqlite3-dev','libreadline-dev']
+    state: present

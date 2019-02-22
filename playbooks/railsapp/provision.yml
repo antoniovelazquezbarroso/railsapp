@@ -46,5 +46,13 @@
         group: "{{ app_user }}"
         mode: 0755
 
-    - import_tasks: db_postgres.yml
+    # SPECIFIC DATABASE PROVISIONING TASKS
+    # (PER DATABASE TYPE)
+    - import_tasks: db_postgres_tasks.yml
       when: db_type == 'postgres'
+
+    - import_tasks: db_mysql_tasks.yml
+      when: db_type == 'mysql'
+
+    - import_tasks: db_sqlite_tasks.yml
+      when: db_type == 'sqlite'      
