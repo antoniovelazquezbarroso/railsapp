@@ -46,25 +46,27 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     state: present
+    insertafter : '  password:'
   with_items:
     - {
-      regexp: " port:",
-      line: "  port: 5432"
+      regexp: "  socket:",
+      line: "#  socket: /var/run/mysqld/mysqld.sock     # Ubuntu 14.04"
+    }
+    - {
+      regexp: " port: 3306",
+      line: "  port: 3306"
     }
     - {
       regexp: "  host:",
       line: "  host: {{ groups['db'][0] }}"
     }
     - {
-      regexp: "  password:",
+      regexp: "  password: root",
       line: "  password: {{ app_name }}"
     }
     - {
-      regexp: "  username:",
+      regexp: "  username: root",
       line: "  username: {{ app_name }}"
     }
-    - {
-      regexp: "  database:",
-      line: "  database: {{ app_name }}_production"
-    }
   notify: restart nginx
+

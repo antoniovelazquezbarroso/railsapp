@@ -3,4 +3,5 @@
 - src: geerlingguy.nodejs
 - src: rvm.ruby
 
+- src: geerlingguy.mysql
 
