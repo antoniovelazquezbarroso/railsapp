@@ -1,7 +1,7 @@
 upstream railsapp {
 # ip-hash;     # commented out for testing
   server 192.168.2.41:9292;
-#  server {{ groups['app'][1] }}:9292;
+#  server {{ groups['app'][1] }}:9292;  # PELIGROSO, FALLA TEMPLATE SI NO EXISTE
 #  server unix://{{ app_directory }}/tmp/sockets/puma.sock;
 }
 

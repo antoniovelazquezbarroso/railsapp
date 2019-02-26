@@ -3,24 +3,20 @@
 # To provision with vagrant just run vagrant up
 
 # To provision with metal inventory you should run 
-
 #    $ ansible-playbook playbooks/configure.yml -i inventories/metal/inventory --ask-become-pass
-
 #     or 
-
 #    $ ansible-playbook playbooks/configure.yml -i inventories/metal/inventory -v -b -c paramiko --ask-become-pass
+
 
 # To redirect external traffic from the external router to the web server of railsapp
 # you need nginx installed at the server where you receive redirected port 80 traffic of your router
 # (it is 192.168.1.32 at home; the same host used to monitor railsapp)
 # and to redirect with a proxy this traffic to the web server of railsapp
 # (it is 192.168.1.30 in my metal inventory)
-# see sample playbook to install nginx in 192.168.1.32 at /playbooks/nginx/sample_nginx_install.yml
-# and see sample config for the proxy at /playbooks/nginx/files/proxypass.conf 
+# see sample config for the redirect proxy at /playbooks/nginx/files/proxypass.conf.sample 
 
 
 # To provision with digital ocean or AWS
-
 # Uncomment in /playbooks/provision.yml file the provisioner to be used
 # Play the /playbooks/provision.yml playbook on the corresponding inventory file
     $ ansible-playbook -i inventories/digitalocean/inventory playbooks/provision.yml
@@ -34,6 +30,10 @@
 # =========================================================================================================
 # IF YOU REINSTALL THE ROLES (from ansible-galaxy), CHECK FOR REQUIRED AMMENDMENTS at:
 
+#   role rvm.ruby/tasks/rubies.yml, incluir "changed_when: False" como ultima linea en los tasks
+#         Symlink ruby related binaries on the system path, y
+#         Symlink bundler binaries on the system path
+#         es solo por estetica, para que no salga como "changed" al correr el playbook
 
 #   role backup/templates/backup.sh.j2, incluir monit check
 #        (añadir NOW=$(date +"%T"), y

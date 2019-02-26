@@ -58,7 +58,8 @@
         owner: "{{ app_user }}"
         group: "{{ app_user }}"
         recurse: yes
-      notify: restart nginx
+      changed_when: False
+#      notify: restart nginx
 
     - name: Start Puma server.
       become: yes

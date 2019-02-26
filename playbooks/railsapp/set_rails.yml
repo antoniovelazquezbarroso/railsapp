@@ -57,14 +57,14 @@
     }
     - {
       regexp: "  password:",
-      line: "  password: {{ app_name }}"
+      line: "  password: {{ db_password }}"
     }
     - {
       regexp: "  username:",
-      line: "  username: {{ app_name }}"
+      line: "  username: {{ db_username }}"
     }
     - {
       regexp: "  database:",
-      line: "  database: {{ app_name }}_production"
+      line: "  database: {{ db_database_name }}_production"
     }
   notify: restart nginx

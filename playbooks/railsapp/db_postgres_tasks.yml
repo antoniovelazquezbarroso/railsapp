@@ -8,8 +8,8 @@
 
 - name: Create postgres user for the app
   postgresql_user:
-    name: "{{ app_user }}"
-    password: "{{ app_user }}"
+    name: "{{ db_username }}"
+    password: "{{ db_password }}"
     #role_attr_flags: CREATEDB,NOSUPERUSER
     state: present
   become: yes
@@ -23,8 +23,8 @@
 
 - name: Setup app production database if not already exists
   postgresql_db:
-    name: "{{ app_name }}_production"
-    owner: "{{ app_user }}"
+    name: "{{ db_database_name }}_production"
+    owner: "{{ db_username }}"
     state: present
   become: yes
   become_user: postgres
@@ -39,8 +39,8 @@
 - name: Setup postgres hba entry (for postgres user and app production database)
   lineinfile:
     path: "/etc/postgresql/9.5/main/pg_hba.conf"
-    regexp: "^#?host {{ app_name }}_production {{ app_user }} {{ inventory_hostname }}/32 password"
-    line: "host {{ app_name }}_production {{ app_user }} {{ inventory_hostname }}/32 password"
+    regexp: "^#?host {{ db_database_name }}_production {{ db_username }} {{ inventory_hostname }}/32 password"
+    line: "host {{ db_database_name }}_production {{ db_username }} {{ inventory_hostname }}/32 password"
     state: present
   become: yes
   become_user: postgres
